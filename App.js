@@ -27,6 +27,7 @@ const values = Object.values(data);
 //Initialize Clevertap
 const CleverTap = require('clevertap-react-native');
 
+
 class Greenwood extends React.Component {
   constructor(props) {
     super(props)
@@ -73,7 +74,7 @@ class Greenwood extends React.Component {
 
     CleverTap.createNotificationChannelWithSound("withsound", "withsound", "CT React Native Testing", 4, true,"bird.wav"); //To create notification channel
     CleverTap.createNotificationChannelWithSound("vishal","vishal123","YourChannelDescription", 4, true,"notification_one.mp3");
-    
+    CleverTap.createNotificationChannelWithSound("withsound2", "withsound2", "CT React Native Testing", 4, true,"appleiphone.wav");
     CleverTap.initializeInbox(); //For initializing Appinbox 
 
     //For Fetching User Properties 
@@ -88,6 +89,9 @@ class Greenwood extends React.Component {
       this.handleCleverTapInbox(CleverTap.CleverTapInboxMessageButtonTapped, event);
       console.log("endoflistener")
     });
+    CleverTap.addListener(CleverTap.CleverTapPushNotificationClicked, (e)=>{
+      alert("Testa123");
+      console.log("ABCahaha"+e)});
 
     CleverTap.addListener(CleverTap.CleverTapDisplayUnitsLoaded, (event) => {
       console.log("insidenative")
@@ -95,9 +99,10 @@ class Greenwood extends React.Component {
       this.handleCleverTapDisplayUnitsLoaded(CleverTap.CleverTapDisplayUnitsLoaded, event);
       console.log("ALL Display for Native is "+JSON.stringify(event)+"eventname is")
       console.log("outsidenative")
+      
+    });
 
-  });
-  }
+}
   
 
 
@@ -210,6 +215,22 @@ class Greenwood extends React.Component {
     CleverTap.recordEvent('ProductLiked', { 'Name': 'iPhone12', 'price': 80000, 'color': 'Jet Black', 'sku': 'IP1202' });
     alert("Product Liked ")
   }
+  onuserlogin(){
+    CleverTap.onUserLogin({
+      'Name': 'Jack Montana',                    // String
+      'Identity': '61026032',                    // String or number
+      'Email': 'jack@gmail.com',                 // Email address of the user
+      'Phone': '+14155551234',                   // Phone (with the country code, starting with +)
+      'Gender': 'M',                             // Can be either M or F
+      'DOB' : new Date('1992-12-22T06:35:31'),   // Date of Birth. Set the Date object to the appropriate value first
+
+// optional fields. controls whether the user will be sent email, push, etc.
+      'MSG-email': false,                        // Disable email notifications
+      'MSG-push': true,                          // Enable push notifications
+      'MSG-sms': false,                          // Disable SMS notifications
+      'MSG-whatsapp': true                    // Enable WhatsApp notificatio                        //Array of Strings for user properties
+})
+  }
 
 
   renderItemComponent = (data) =>
@@ -254,6 +275,9 @@ class Greenwood extends React.Component {
           </View>
           <View style={{ width: 200, paddingTop: 30 }}>
             <Button title='Push Above Event ' color={this.state.color} onPress={() => this.pushInputEvent()} />
+          </View>
+          <View style={{ width: 200, paddingTop: 30 }}>
+            <Button title='onUserLogin ' color={this.state.color} onPress={() => this.onuserlogin()} />
           </View>
           <View style={{ width: 200, paddingTop: 30 }}>
             <Button title='Push Custom Event ' color={this.state.color} onPress={() => this.pushcustomevent()} />
